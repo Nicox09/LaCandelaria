@@ -1,0 +1,162 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import { Image } from "astro:assets";
+import { languages, type Lang } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+
+import heroImg from "../../assets/img/llamas-campo-2.jpg";
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+const contacto = t("contacto");
+const meta = t("meta");
+---
+
+<Layout lang={lang} title={`${contacto.h1} — La Candelaria`} description={meta.description}>
+  <main id="main">
+    <!-- HERO -->
+    <div class="relative isolate overflow-hidden min-h-[460px] flex flex-col">
+      <Image src={heroImg} alt="" class="absolute inset-0 w-full h-full object-cover scale-110 blur-sm brightness-[0.55]" loading="eager" fetchpriority="high" widths={[640, 1024, 1600]} sizes="100vw" />
+      <div class="absolute inset-0 bg-gradient-to-b from-trocha/10 via-trocha/40 to-trocha/85"></div>
+      <Navbar lang={lang} active="contacto" variant="onPhoto" />
+      <div class="relative mx-auto max-w-[1440px] px-6 md:px-10 pt-32 pb-16 flex-1 flex flex-col justify-end">
+        <p class="text-sm font-bold tracking-widest text-[#ecc7ab] mb-4">{contacto.eyebrow}</p>
+        <h1 class="font-display font-black text-5xl md:text-6xl text-lana-card">{contacto.h1}</h1>
+        <p class="mt-5 max-w-xl text-lg text-[#e9e0d1] leading-relaxed">{contacto.intro}</p>
+      </div>
+    </div>
+
+    <!-- FORM + INFO -->
+    <section class="bg-lana">
+      <div class="mx-auto max-w-[1440px] px-6 md:px-10 py-20 grid lg:grid-cols-[1fr_420px] gap-12">
+        <!-- Form -->
+        <div class="bg-lana-card border border-piedra-line p-8 md:p-10">
+          <h2 class="font-display font-bold text-2xl mb-6">{contacto.formTitle}</h2>
+
+          <form id="contact-form" class="space-y-5">
+            <input type="hidden" name="access_key" value={import.meta.env.PUBLIC_WEB3FORMS_KEY} />
+            <input type="hidden" name="subject" value="Nueva consulta desde la web — La Candelaria" />
+            <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <div>
+              <label for="name" class="block text-sm font-bold mb-2">{contacto.formFields.name}</label>
+              <input id="name" name="name" type="text" required placeholder={contacto.formFields.namePh}
+                class="w-full border border-piedra-line bg-lana-card px-4 py-3 focus:outline-none focus:border-tierra transition-colors" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-bold mb-2">{contacto.formFields.email}</label>
+              <input id="email" name="email" type="email" required placeholder={contacto.formFields.emailPh}
+                class="w-full border border-piedra-line bg-lana-card px-4 py-3 focus:outline-none focus:border-tierra transition-colors" />
+            </div>
+            <div>
+              <label for="subject_field" class="block text-sm font-bold mb-2">{contacto.formFields.subject}</label>
+              <input id="subject_field" name="subject_field" type="text" placeholder={contacto.formFields.subjectPh}
+                class="w-full border border-piedra-line bg-lana-card px-4 py-3 focus:outline-none focus:border-tierra transition-colors" />
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-bold mb-2">{contacto.formFields.message}</label>
+              <textarea id="message" name="message" required rows="5" placeholder={contacto.formFields.messagePh}
+                class="w-full border border-piedra-line bg-lana-card px-4 py-3 focus:outline-none focus:border-tierra transition-colors"></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn"
+              class="rounded-full bg-tierra hover:bg-tierra-dark transition-colors px-8 py-4 font-bold text-lana-card">
+              {contacto.formFields.submit}
+            </button>
+
+            <p id="form-status" class="text-sm hidden" role="status"></p>
+          </form>
+        </div>
+
+        <!-- Info -->
+        <div>
+          <h2 class="font-display font-bold text-2xl mb-6">{contacto.infoTitle}</h2>
+          <div class="space-y-5">
+            {contacto.infoItems.map((it) => (
+              <div>
+                <p class="text-xs font-bold tracking-widest text-tierra">{it.k}</p>
+                <p class="text-lg">{it.v}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="border-t border-piedra-line my-8"></div>
+
+          <h3 class="font-display font-bold text-xl mb-4">{contacto.socialTitle}</h3>
+          <div class="flex flex-wrap gap-3">
+            <a href="https://instagram.com/llamaslacandelaria" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-full bg-[#e8dcc6] hover:bg-tierra hover:text-lana-card transition-colors text-sm font-bold">Instagram</a>
+            <a href="https://wa.me/5493814012399" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-full bg-[#e8dcc6] hover:bg-tierra hover:text-lana-card transition-colors text-sm font-bold">WhatsApp</a>
+            <a href="mailto:llamaslacandelaria@gmail.com" class="px-5 py-2.5 rounded-full bg-[#e8dcc6] hover:bg-tierra hover:text-lana-card transition-colors text-sm font-bold">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATIONS -->
+    <section class="bg-[#e8dcc6]">
+      <div class="mx-auto max-w-[1440px] px-6 md:px-10 py-20">
+        <p class="text-sm font-bold tracking-widest text-tierra mb-3">{contacto.locEyebrow}</p>
+        <h2 class="font-display font-black text-4xl md:text-5xl mb-12 max-w-2xl">{contacto.locTitle}</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {contacto.locations.map((loc) => (
+            <div class="bg-lana-card p-7">
+              <p class="text-xs font-bold tracking-widest text-tierra mb-3">{loc.tag}</p>
+              <h3 class="font-display font-bold text-xl mb-3">{loc.title}</h3>
+              <p class="text-piedra text-sm leading-relaxed">{loc.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Footer lang={lang} />
+  </main>
+</Layout>
+
+<script define:vars={{ success: contacto.formFields.success, error: contacto.formFields.error, sending: contacto.formFields.sending, submitLabel: contacto.formFields.submit }}>
+  const form = document.getElementById("contact-form");
+  const btn = document.getElementById("submit-btn");
+  const status = document.getElementById("form-status");
+
+  form?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = sending;
+    status.classList.add("hidden");
+
+    const formData = new FormData(form);
+    // Web3Forms espera el campo "subject" como asunto; usamos subject_field como campo visible.
+    if (formData.get("subject_field")) {
+      formData.set("subject", String(formData.get("subject_field")));
+    }
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        status.textContent = success;
+        status.className = "text-sm text-tierra font-bold";
+        form.reset();
+      } else {
+        throw new Error(data.message || "error");
+      }
+    } catch (err) {
+      status.textContent = error;
+      status.className = "text-sm text-chile font-bold";
+    } finally {
+      status.classList.remove("hidden");
+      btn.disabled = false;
+      btn.textContent = submitLabel;
+    }
+  });
+</script>
